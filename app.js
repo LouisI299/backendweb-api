@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 
-// Load environment variables
 dotenv.config();
 
 // Connect to MongoDB
@@ -20,7 +19,7 @@ if (mongoose.models.User) {
   delete mongoose.models.User;
 }
 
-// Define models
+// models
 const User = mongoose.model(
   "User",
   new mongoose.Schema({
@@ -83,7 +82,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride("_method"));
 
-// Root route - Display CRUD forms and data
+// / Route
 app.get("/", async (req, res) => {
   const users = await User.find();
   const posts = await Post.find().populate("user", "firstName lastName");
@@ -203,7 +202,6 @@ app.get("/api/posts/:id", async (req, res) => {
   res.json(post);
 });
 
-// CRUD for Users
 app.post("/users", async (req, res) => {
   req.body.is_admin = req.body.is_admin === "on";
   try {
@@ -246,7 +244,6 @@ app.delete("/users/:id", async (req, res) => {
   }
 });
 
-// CRUD Routes for Posts
 app.post("/posts", async (req, res) => {
   try {
     await Post.create(req.body);
